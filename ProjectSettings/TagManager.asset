@@ -3,7 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Ground
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -13,9 +15,9 @@ TagManager:
   - UI
   - 
   - 
-  - ground
-  - BG_Fifth
-  - BG_Forth
+  - Ground
+  - Ignore
+  - Player
   - 
   - 
   - 
@@ -41,12 +43,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: ForeGround
-    uniqueID: 1101280453
+  - name: Ground
+    uniqueID: 610387603
     locked: 0
-  - name: BG
-    uniqueID: 830699753
-    locked: 0
-  - name: Player
-    uniqueID: 3753381771
+  - name: BackGround
+    uniqueID: 3878447009
     locked: 0
