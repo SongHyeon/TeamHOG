@@ -9,15 +9,14 @@ public class BossMovement : MonoBehaviour
     public float stopDistance = 5f;
     public float awareDistance = 10f;
     public Animator animator;
-    
     private Transform target;
-
+    private Rigidbody2D rigidBody;
     // Start is called before the first frame update
     void Start()
     {
         startingPoint = transform.position;
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
-        Debug.Log(target);
+        rigidBody = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -28,10 +27,17 @@ public class BossMovement : MonoBehaviour
             float move = transform.position.x - target.position.x;
             Flip(move);
             animator.SetBool("IsWalking", true);
+            Vector3 velocity = rigidBody.velocity;
+            velocity.x = speed*(move>0?-1f:1f);
+            rigidBody.velocity = velocity;
         }
         else
         {
             animator.SetBool("IsWalking", false);
+        }
+        if(Vector2.Distance(transform.position, target.position ) <= stopDistance)
+        {
+            animator.SetTrigger("Attack1");
         }
     }
 
