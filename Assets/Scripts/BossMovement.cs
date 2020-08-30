@@ -11,12 +11,14 @@ public class BossMovement : MonoBehaviour
     public Animator animator;
     private Transform target;
     private Rigidbody2D rigidBody;
+    System.Random random;
     // Start is called before the first frame update
     void Start()
     {
         startingPoint = transform.position;
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         rigidBody = GetComponent<Rigidbody2D>();
+        random = new System.Random();
     }
 
     // Update is called once per frame
@@ -37,7 +39,11 @@ public class BossMovement : MonoBehaviour
         }
         if(Vector2.Distance(transform.position, target.position ) <= stopDistance)
         {
-            animator.SetTrigger("Attack1");
+            if(animator.GetBool("Attacking")==false)
+            {
+                animator.SetBool("Attacking", true);
+                animator.SetTrigger(string.Format("Attack{0}",random.Next(1, 3)));
+            }
         }
     }
 
