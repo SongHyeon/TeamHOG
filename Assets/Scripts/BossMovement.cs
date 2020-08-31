@@ -4,27 +4,61 @@ using UnityEngine;
 
 public class BossMovement : MonoBehaviour
 {
-    private Vector2 startingPoint;
     public float speed = 8f;
     public float stopDistance = 5f;
     public float awareDistance = 10f;
     public Animator animator;
     private Transform target;
     private Rigidbody2D rigidBody;
-    System.Random random;
+
+    enum BossState
+    {
+        IDLE = 0,
+        MOVE,
+        ATTACK,
+        BEATEN,
+        DEAD
+    }
+    BossState state;
+
     // Start is called before the first frame update
     void Start()
     {
-        startingPoint = transform.position;
+        state = BossState.IDLE;
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         rigidBody = GetComponent<Rigidbody2D>();
-        random = new System.Random();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Vector2.Distance(transform.position, target.position ) > stopDistance && Vector2.Distance(transform.position, target.position) < awareDistance)
+        if (state == BossState.DEAD)
+            return;
+        state = TryMove(state);
+        state = TryAttack(state);
+    }
+
+    private BossState TryAttack(BossState state)
+    {
+        if(state == BossState.IDLE
+        && Vector2.Distance(transform.position, target.position ) <= stopDistance)
+        {
+            if(animator.GetBool("Attacking")==false)
+            {
+                animator.SetBool("Attacking", true);
+                animator.SetTrigger(string.Format("Attack{0}",Random.Range(1,4)));
+                return BossState.ATTACK;
+            }
+        }
+        return animator.GetBool("Attacking") ? BossState.ATTACK:BossState.IDLE;
+    }
+
+    private BossState TryMove(BossState state)
+    {
+        // State 가 ATTACK 아닐때 움직 일 수 있음.
+        if(state != BossState.ATTACK 
+        && Vector2.Distance(transform.position, target.position ) > stopDistance 
+        && Vector2.Distance(transform.position, target.position) < awareDistance)
         {
             float move = transform.position.x - target.position.x;
             Flip(move);
@@ -32,22 +66,14 @@ public class BossMovement : MonoBehaviour
             Vector3 velocity = rigidBody.velocity;
             velocity.x = speed*(move>0?-1f:1f);
             rigidBody.velocity = velocity;
+            return BossState.MOVE;
         }
         else
         {
             animator.SetBool("IsWalking", false);
         }
-        if(Vector2.Distance(transform.position, target.position ) <= stopDistance)
-        {
-            if(animator.GetBool("Attacking")==false)
-            {
-                animator.SetBool("Attacking", true);
-                animator.SetTrigger(string.Format("Attack{0}",random.Next(1, 3)));
-            }
-        }
+        return BossState.IDLE;
     }
-
-
     private void Flip(float move)
     {
         Vector3 charcterScale = transform.localScale;

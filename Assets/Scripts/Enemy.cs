@@ -83,7 +83,7 @@ public class Enemy : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("Come to flip");
+                    // Debug.Log("Come to flip");
                     Flip();
                 }
             }
@@ -116,7 +116,7 @@ public class Enemy : MonoBehaviour
     {
         // Switch the way the player is labelled as facing.
         facingRight = !facingRight;
-        Debug.Log("Flip" + facingRight);
+        // Debug.Log("Flip" + facingRight);
 
         // Multiply the player's x local scale by -1.
         Vector3 theScale = transform.localScale;
