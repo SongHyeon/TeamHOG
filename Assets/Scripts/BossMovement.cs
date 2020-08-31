@@ -10,7 +10,9 @@ public class BossMovement : MonoBehaviour
     public Animator animator;
     private Transform target;
     private Rigidbody2D rigidBody;
-
+    public float attackDelayTime = 0.1f;
+    private float attackStartTime = 0f;
+    DelayAnimation delayAnimation;
     enum BossState
     {
         IDLE = 0,
@@ -24,6 +26,7 @@ public class BossMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        delayAnimation = GetComponentInChildren<DelayAnimation>();
         state = BossState.IDLE;
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         rigidBody = GetComponent<Rigidbody2D>();
@@ -41,14 +44,17 @@ public class BossMovement : MonoBehaviour
     private BossState TryAttack(BossState state)
     {
         if(state == BossState.IDLE
-        && Vector2.Distance(transform.position, target.position ) <= stopDistance)
+        && Time.time - attackStartTime > attackDelayTime
+        && Vector2.Distance(transform.position, target.position ) <= stopDistance
+        && animator.GetBool("Attacking")==false)
         {
-            if(animator.GetBool("Attacking")==false)
-            {
-                animator.SetBool("Attacking", true);
-                animator.SetTrigger(string.Format("Attack{0}",Random.Range(1,4)));
-                return BossState.ATTACK;
-            }
+            animator.SetBool("Attacking", true);
+            animator.SetTrigger(string.Format("Attack{0}",Random.Range(1,4)));
+
+            delayAnimation.standbyTime = Random.Range(0f, 2f);
+            attackStartTime = Time.time + delayAnimation.standbyTime;
+            
+            return BossState.ATTACK;
         }
         return animator.GetBool("Attacking") ? BossState.ATTACK:BossState.IDLE;
     }
