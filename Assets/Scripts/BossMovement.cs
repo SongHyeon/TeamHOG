@@ -12,7 +12,7 @@ public class BossMovement : MonoBehaviour
     private Rigidbody2D rigidBody;
     public float attackDelayTime = 0.1f;
     private float attackStartTime = 0f;
-    DelayAnimation delayAnimation;
+    private float standbyTime = 0f;
     enum BossState
     {
         IDLE = 0,
@@ -22,14 +22,15 @@ public class BossMovement : MonoBehaviour
         DEAD
     }
     BossState state;
+    [HideInInspector] public bool forceMove;
 
     // Start is called before the first frame update
     void Start()
     {
-        delayAnimation = GetComponentInChildren<DelayAnimation>();
+        forceMove = false;
         state = BossState.IDLE;
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
-        rigidBody = GetComponent<Rigidbody2D>();
+        rigidBody = GetComponentInParent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -49,10 +50,11 @@ public class BossMovement : MonoBehaviour
         && animator.GetBool("Attacking")==false)
         {
             animator.SetBool("Attacking", true);
-            animator.SetTrigger(string.Format("Attack{0}",Random.Range(1,4)));
+            animator.SetTrigger(string.Format("Attack{0}",Random.Range(4,5)));
+            // animator.SetTrigger(string.Format("Attack{0}",Random.Range(1,5)));
 
-            delayAnimation.standbyTime = Random.Range(0f, 2f);
-            attackStartTime = Time.time + delayAnimation.standbyTime;
+            standbyTime = Random.Range(0f, 2f);
+            attackStartTime = Time.time + standbyTime;
             
             return BossState.ATTACK;
         }
@@ -69,31 +71,49 @@ public class BossMovement : MonoBehaviour
             float move = transform.position.x - target.position.x;
             Flip(move);
             animator.SetBool("IsWalking", true);
-            Vector3 velocity = rigidBody.velocity;
-            velocity.x = speed*(move>0?-1f:1f);
-            rigidBody.velocity = velocity;
+            Move(speed);
             return BossState.MOVE;
+        }
+        else if(forceMove)
+        {
+            Move(speed);
         }
         else
         {
-            animator.SetBool("IsWalking", false);
+            if(animator.GetBool("IsWalking"))
+                animator.SetBool("IsWalking", false);
+            else
+                Move(0f);
         }
         return BossState.IDLE;
     }
+
+    private void Move(float speed)
+    {
+        Vector3 velocity = rigidBody.velocity;
+        velocity.x = speed*(transform.parent.localScale.x > 0 ? -1f:1f);
+        rigidBody.velocity = velocity;
+    }
+
     private void Flip(float move)
     {
-        Vector3 charcterScale = transform.localScale;
+        Vector3 charcterScale = transform.parent.localScale;
         if (move < 0)
         {
-            charcterScale.x = -1f * Mathf.Abs(transform.localScale.x);
+            charcterScale.x = -1f * Mathf.Abs(transform.parent.localScale.x);
         }
         else
         {
-            charcterScale.x = 1f * Mathf.Abs(transform.localScale.x);
+            charcterScale.x = 1f * Mathf.Abs(transform.parent.localScale.x);
         }
-        transform.localScale = charcterScale;
+        transform.parent.localScale = charcterScale;
 
     }
 
-
+    IEnumerator Delay()
+    {
+        animator.speed = 0.0f;
+        yield return new WaitForSeconds(standbyTime);
+        animator.speed = 1f;
+    }
 }

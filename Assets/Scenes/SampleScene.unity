@@ -15224,6 +15224,36 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &992975599 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2165238913879293317, guid: 78299bdb6fd706d4fa44c562c3af57e4,
+    type: 3}
+  m_PrefabInstance: {fileID: 2165238913371880827}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &992975600 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 2165238913879293051, guid: 78299bdb6fd706d4fa44c562c3af57e4,
+    type: 3}
+  m_PrefabInstance: {fileID: 2165238913371880827}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &992975604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 992975599}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0dde691005e6d004a81a6f2442b06570, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 2
+  stopDistance: 5
+  awareDistance: 10
+  animator: {fileID: 992975600}
+  attackDelayTime: 0.1
+  forceMove: 0
 --- !u!1 &1004633957
 GameObject:
   m_ObjectHideFlags: 0
@@ -17140,6 +17170,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2165238913452524433, guid: 78299bdb6fd706d4fa44c562c3af57e4,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2165238913452524434, guid: 78299bdb6fd706d4fa44c562c3af57e4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -17200,5 +17235,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Boss
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 2165238913879293316, guid: 78299bdb6fd706d4fa44c562c3af57e4,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.81
+      objectReference: {fileID: 0}
+    - target: {fileID: 2165238913879293316, guid: 78299bdb6fd706d4fa44c562c3af57e4,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 2165238912514649370, guid: 78299bdb6fd706d4fa44c562c3af57e4, type: 3}
+    - {fileID: 2165238913452524433, guid: 78299bdb6fd706d4fa44c562c3af57e4, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 78299bdb6fd706d4fa44c562c3af57e4, type: 3}

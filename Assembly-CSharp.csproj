@@ -43,7 +43,6 @@
      <Compile Include="Assets\PlayerAttack.cs" />
      <Compile Include="Assets\PlayerHealth.cs" />
      <Compile Include="Assets\Scripts\BossMovement.cs" />
-     <Compile Include="Assets\Scripts\DelayAnimation.cs" />
      <Compile Include="Assets\Scripts\Enemy.cs" />
      <Compile Include="Assets\Scripts\Enemy1_Attack.cs" />
      <Compile Include="Assets\Scripts\EnemyBehaviour.cs" />
